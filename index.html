@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Smart Car Buying Helper</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --bg-alt: #1e293b;
+    --card: #ffffff;
+    --text: #0f172a;
+    --muted: #64748b;
+    --accent: #2563eb;
+    --accent-hover: #1d4ed8;
+    --good: #16a34a;
+    --warn: #ea580c;
+    --bad: #dc2626;
+    --border: #e2e8f0;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+    min-height: 100vh;
+    color: var(--text);
+    padding: 24px 16px;
+  }
+  .wrap {
+    max-width: 880px;
+    margin: 0 auto;
+  }
+  header {
+    text-align: center;
+    color: #fff;
+    margin-bottom: 28px;
+  }
+  header h1 {
+    margin: 0 0 8px;
+    font-size: 2rem;
+    font-weight: 700;
+  }
+  header p {
+    margin: 0;
+    opacity: 0.85;
+    font-size: 1rem;
+  }
+  .tabs {
+    display: flex;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 6px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    overflow-x: auto;
+  }
+  .tab {
+    flex: 1;
+    min-width: 140px;
+    padding: 10px 14px;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .tab:hover { color: #fff; }
+  .tab.active {
+    background: #fff;
+    color: var(--accent);
+  }
+  .panel {
+    background: var(--card);
+    border-radius: 14px;
+    padding: 28px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    display: none;
+  }
+  .panel.active { display: block; }
+  h2 {
+    margin: 0 0 6px;
+    font-size: 1.4rem;
+  }
+  .subtitle {
+    color: var(--muted);
+    margin: 0 0 24px;
+    font-size: 0.95rem;
+  }
+  .question {
+    margin-bottom: 22px;
+  }
+  .question label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 8px;
+  }
+  .opt {
+    padding: 12px;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    background: #fff;
+    cursor: pointer;
+    text-align: center;
+    font-size: 0.9rem;
+    transition: all 0.15s;
+  }
+  .opt:hover { border-color: var(--accent); }
+  .opt.selected {
+    border-color: var(--accent);
+    background: #eff6ff;
+    color: var(--accent);
+    font-weight: 600;
+  }
+  input[type="number"], input[type="text"] {
+    width: 100%;
+    padding: 10px 12px;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+  }
+  input:focus { outline: none; border-color: var(--accent); }
+  .btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn:hover { background: var(--accent-hover); }
+  .btn-secondary {
+    background: #fff;
+    color: var(--accent);
+    border: 2px solid var(--accent);
+  }
+  .btn-secondary:hover { background: #eff6ff; }
+  .result {
+    margin-top: 20px;
+    padding: 20px;
+    background: #f8fafc;
+    border-radius: 10px;
+    border-left: 4px solid var(--accent);
+  }
+  .result h3 {
+    margin: 0 0 12px;
+    color: var(--accent);
+  }
+  .pick {
+    background: #fff;
+    padding: 14px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    border: 1px solid var(--border);
+  }
+  .pick-name { font-weight: 700; font-size: 1.05rem; }
+  .pick-meta { color: var(--muted); font-size: 0.85rem; margin-top: 4px; }
+  .calc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  .calc-field label {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+  .breakdown {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 8px 16px;
+    margin-top: 12px;
+  }
+  .breakdown .label { color: var(--muted); }
+  .breakdown .val { font-weight: 600; text-align: right; }
+  .total-row {
+    border-top: 2px solid var(--border);
+    padding-top: 10px;
+    margin-top: 8px;
+    font-size: 1.1rem;
+  }
+  .total-row .val { color: var(--accent); }
+  .checklist {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .checklist li {
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    background: #f8fafc;
+    border-radius: 8px;
+    border-left: 4px solid var(--good);
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .checklist li input[type="checkbox"] {
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+  }
+  .checklist li.flag { border-left-color: var(--bad); background: #fef2f2; }
+  .checklist li.warn { border-left-color: var(--warn); background: #fff7ed; }
+  .section-title {
+    font-weight: 700;
+    margin: 18px 0 8px;
+    color: var(--text);
+  }
+  .tip {
+    background: #eff6ff;
+    border-left: 4px solid var(--accent);
+    padding: 12px 14px;
+    border-radius: 6px;
+    margin: 12px 0;
+    font-size: 0.92rem;
+  }
+  footer {
+    text-align: center;
+    color: rgba(255,255,255,0.6);
+    margin-top: 24px;
+    font-size: 0.85rem;
+  }
+  @media (max-width: 600px) {
+    header h1 { font-size: 1.5rem; }
+    .panel { padding: 18px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Smart Car Buying Helper</h1>
+    <p>Find the right car, know the real cost, and walk into the dealership prepared.</p>
+  </header>
+
+  <div class="tabs" role="tablist">
+    <button class="tab active" data-target="quiz">Quiz</button>
+    <button class="tab" data-target="tco">Cost Calculator</button>
+    <button class="tab" data-target="negotiate">Negotiation</button>
+    <button class="tab" data-target="used">Used Car Check</button>
+  </div>
+
+  <!-- QUIZ PANEL -->
+  <section id="quiz" class="panel active">
+    <h2>Lifestyle Quiz</h2>
+    <p class="subtitle">Answer a few quick questions to get a body-style recommendation with example models.</p>
+
+    <div class="question" data-key="budget">
+      <label>What's your total budget?</label>
+      <div class="options">
+        <div class="opt" data-value="low">Under $20k</div>
+        <div class="opt" data-value="mid">$20k–35k</div>
+        <div class="opt" data-value="high">$35k–55k</div>
+        <div class="opt" data-value="lux">$55k+</div>
+      </div>
+    </div>
+
+    <div class="question" data-key="size">
+      <label>How many people do you typically carry?</label>
+      <div class="options">
+        <div class="opt" data-value="solo">1–2 (just me/partner)</div>
+        <div class="opt" data-value="small">3–4 (small family)</div>
+        <div class="opt" data-value="large">5+ (large family/group)</div>
+      </div>
+    </div>
+
+    <div class="question" data-key="commute">
+      <label>What's your daily driving like?</label>
+      <div class="options">
+        <div class="opt" data-value="short">Short city trips</div>
+        <div class="opt" data-value="medium">Mixed city/highway</div>
+        <div class="opt" data-value="long">Long highway commute</div>
+        <div class="opt" data-value="rough">Rough roads / off-road</div>
+      </div>
+    </div>
+
+    <div class="question" data-key="priority">
+      <label>Top priority?</label>
+      <div class="options">
+        <div class="opt" data-value="economy">Fuel economy</div>
+        <div class="opt" data-value="cargo">Cargo / hauling</div>
+        <div class="opt" data-value="reliability">Reliability</div>
+        <div class="opt" data-value="fun">Fun to drive</div>
+      </div>
+    </div>
+
+    <div class="question" data-key="fuel">
+      <label>Fuel type preference?</label>
+      <div class="options">
+        <div class="opt" data-value="gas">Gasoline</div>
+        <div class="opt" data-value="hybrid">Hybrid</div>
+        <div class="opt" data-value="ev">Electric</div>
+        <div class="opt" data-value="any">No preference</div>
+      </div>
+    </div>
+
+    <button class="btn" id="getRec">Get My Recommendation</button>
+
+    <div id="quizResult" class="result" style="display:none;"></div>
+  </section>
+
+  <!-- TCO PANEL -->
+  <section id="tco" class="panel">
+    <h2>Total Cost of Ownership</h2>
+    <p class="subtitle">The sticker price is only part of the story. See your real monthly cost.</p>
+
+    <div class="calc-grid">
+      <div class="calc-field">
+        <label>Car price ($)</label>
+        <input type="number" id="price" value="25000" min="0" />
+      </div>
+      <div class="calc-field">
+        <label>Down payment ($)</label>
+        <input type="number" id="down" value="3000" min="0" />
+      </div>
+      <div class="calc-field">
+        <label>Loan term (months)</label>
+        <input type="number" id="term" value="60" min="12" max="84" />
+      </div>
+      <div class="calc-field">
+        <label>Interest rate (% APR)</label>
+        <input type="number" id="apr" value="7" min="0" step="0.1" />
+      </div>
+      <div class="calc-field">
+        <label>Miles driven per year</label>
+        <input type="number" id="miles" value="12000" min="0" />
+      </div>
+      <div class="calc-field">
+        <label>Fuel economy (MPG)</label>
+        <input type="number" id="mpg" value="30" min="1" />
+      </div>
+      <div class="calc-field">
+        <label>Gas price ($/gallon)</label>
+        <input type="number" id="gas" value="3.50" min="0" step="0.01" />
+      </div>
+      <div class="calc-field">
+        <label>Monthly insurance ($)</label>
+        <input type="number" id="insurance" value="120" min="0" />
+      </div>
+      <div class="calc-field">
+        <label>Monthly maintenance ($)</label>
+        <input type="number" id="maint" value="60" min="0" />
+      </div>
+    </div>
+
+    <button class="btn" id="calcBtn">Calculate</button>
+
+    <div id="tcoResult" class="result" style="display:none;"></div>
+  </section>
+
+  <!-- NEGOTIATION PANEL -->
+  <section id="negotiate" class="panel">
+    <h2>Negotiation Prep</h2>
+    <p class="subtitle">Research first. Talk price, not payments. Walk away if it doesn't feel right.</p>
+
+    <div class="section-title">Before you go (research)</div>
+    <ul class="checklist">
+      <li><input type="checkbox" /><span><b>Know the invoice price.</b> Use Kelley Blue Book, Edmunds, and TrueCar to find what dealers paid. Aim 2–5% above invoice on a new car.</span></li>
+      <li><input type="checkbox" /><span><b>Get pre-approved financing</b> from your bank or credit union <i>before</i> visiting. Dealer financing should beat this rate to win your business.</span></li>
+      <li><input type="checkbox" /><span><b>Research market value</b> of your trade-in separately (KBB private party value is higher than trade-in value).</span></li>
+      <li><input type="checkbox" /><span><b>Email 3–5 dealers</b> with the exact trim/options you want. Ask for an "out-the-door" price. Use lower offers as leverage.</span></li>
+      <li><input type="checkbox" /><span><b>Time it right.</b> End of month, end of quarter, and end of year are when dealers chase quotas.</span></li>
+    </ul>
+
+    <div class="section-title">At the dealership</div>
+    <ul class="checklist">
+      <li><input type="checkbox" /><span><b>Negotiate the out-the-door price</b>, not the monthly payment. Monthly-payment negotiation hides longer loans and add-ons.</span></li>
+      <li><input type="checkbox" /><span><b>Keep trade-in, financing, and price separate.</b> Dealers shift profit between these — solve them one at a time.</span></li>
+      <li><input type="checkbox" /><span><b>Decline the F&I office extras</b> (extended warranty, paint sealant, GAP insurance, VIN etching) unless you've priced them elsewhere. You can buy GAP from your insurer for much less.</span></li>
+      <li><input type="checkbox" /><span><b>Read every line of the contract.</b> Watch for "doc fees" above $200, fake "market adjustments," and pre-checked add-ons.</span></li>
+      <li><input type="checkbox" /><span><b>Be ready to walk away.</b> If a deal isn't right, leave. There will be another car at another dealer.</span></li>
+    </ul>
+
+    <div class="tip">
+      <b>Red flag phrases:</b> "What payment do you want to be at?" — "We can only do this deal today." — "Let me check with my manager" (theatrical anchoring). Stay focused on the out-the-door number.
+    </div>
+  </section>
+
+  <!-- USED CAR PANEL -->
+  <section id="used" class="panel">
+    <h2>Used Car Inspection</h2>
+    <p class="subtitle">A 20-minute walkaround can save you thousands. Always get a pre-purchase inspection from an independent mechanic.</p>
+
+    <div class="section-title">Documents (do this first)</div>
+    <ul class="checklist">
+      <li><input type="checkbox" /><span><b>Vehicle history report</b> (Carfax or AutoCheck) — look for accidents, salvage title, odometer rollback, and number of owners.</span></li>
+      <li><input type="checkbox" /><span><b>Match the VIN</b> on the dashboard, door jamb, and title — they must all match.</span></li>
+      <li><input type="checkbox" /><span><b>Service records</b> — regular oil changes and dealer stamps are a green flag.</span></li>
+    </ul>
+
+    <div class="section-title">Exterior walkaround</div>
+    <ul class="checklist">
+      <li><input type="checkbox" /><span>Check panel gaps — uneven gaps suggest prior collision repair.</span></li>
+      <li class="warn"><input type="checkbox" /><span>Paint mismatch under sunlight or runs/orange peel texture = repaint after an accident.</span></li>
+      <li><input type="checkbox" /><span>Tires: even tread wear across all four. Uneven wear = alignment or suspension issues.</span></li>
+      <li class="flag"><input type="checkbox" /><span><b>Rust on frame, subframe, or rocker panels</b> is a deal-breaker. Surface rust on bolts is normal.</span></li>
+    </ul>
+
+    <div class="section-title">Under the hood</div>
+    <ul class="checklist">
+      <li class="flag"><input type="checkbox" /><span><b>Milky oil cap</b> = head gasket failure. Walk away.</span></li>
+      <li class="warn"><input type="checkbox" /><span>Brown/burnt transmission fluid (should be pink/red) = neglected maintenance.</span></li>
+      <li><input type="checkbox" /><span>No oil leaks on the ground or engine bay.</span></li>
+      <li><input type="checkbox" /><span>Battery terminals clean, no corrosion.</span></li>
+    </ul>
+
+    <div class="section-title">Test drive</div>
+    <ul class="checklist">
+      <li><input type="checkbox" /><span>Cold start — listen for knocking, ticking, or grinding.</span></li>
+      <li class="warn"><input type="checkbox" /><span>Steering wheel pulls left or right when hands off = alignment issue (cheap) or frame damage (expensive).</span></li>
+      <li class="warn"><input type="checkbox" /><span>Vibration at 60+ mph = warped rotors or tire balance issue.</span></li>
+      <li class="flag"><input type="checkbox" /><span><b>Transmission slipping, harsh shifts, or delayed engagement</b> on a 5+ year old car = potentially $3k–6k repair.</span></li>
+      <li><input type="checkbox" /><span>All electronics work: windows, locks, AC, heat, infotainment, backup camera.</span></li>
+      <li class="flag"><input type="checkbox" /><span><b>Check engine light on or recently cleared</b> (no engine codes when scanned) = something is being hidden.</span></li>
+    </ul>
+
+    <div class="tip">
+      <b>Always:</b> Get a pre-purchase inspection (PPI) at an independent mechanic before signing. Costs $100–200 and routinely catches $1,000+ problems. If the seller refuses a PPI, walk away.
+    </div>
+  </section>
+
+  <footer>Built as a static site — runs entirely in your browser.</footer>
+</div>
+
+<script>
+  // ---------- Tab switching ----------
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById(tab.dataset.target).classList.add('active');
+    });
+  });
+
+  // ---------- Quiz ----------
+  const answers = {};
+  document.querySelectorAll('.question').forEach(q => {
+    const key = q.dataset.key;
+    q.querySelectorAll('.opt').forEach(opt => {
+      opt.addEventListener('click', () => {
+        q.querySelectorAll('.opt').forEach(o => o.classList.remove('selected'));
+        opt.classList.add('selected');
+        answers[key] = opt.dataset.value;
+      });
+    });
+  });
+
+  // Body-style recommendation logic + example models per budget tier.
+  function recommend(a) {
+    // Decide body style
+    let style;
+    if (a.size === 'large') style = 'SUV / Minivan';
+    else if (a.commute === 'rough') style = 'SUV / Truck';
+    else if (a.priority === 'cargo') style = a.size === 'small' ? 'Crossover SUV' : 'Truck';
+    else if (a.priority === 'fun') style = 'Sport Sedan / Coupe';
+    else if (a.commute === 'short' && a.priority === 'economy') style = 'Compact Hatchback';
+    else if (a.priority === 'economy') style = 'Sedan / Hybrid';
+    else style = 'Sedan / Crossover';
+
+    // Picks by style + budget tier
+    const picks = {
+      'Sedan / Hybrid': {
+        low: ['Toyota Corolla Hybrid (used)', 'Honda Insight (used)', 'Hyundai Elantra Hybrid (used)'],
+        mid: ['Toyota Camry Hybrid', 'Honda Accord Hybrid', 'Hyundai Sonata Hybrid'],
+        high: ['Toyota Crown', 'Lexus ES Hybrid (used)', 'Honda Accord Touring Hybrid'],
+        lux: ['Lexus ES 300h', 'BMW 530e', 'Mercedes E-Class Hybrid']
+      },
+      'Sedan / Crossover': {
+        low: ['Toyota Corolla (used)', 'Honda Civic (used)', 'Mazda3 (used)'],
+        mid: ['Honda Civic / Accord', 'Toyota Corolla / Camry', 'Mazda3'],
+        high: ['Honda Accord Touring', 'Toyota Camry XSE', 'Mazda6 (used)'],
+        lux: ['Lexus IS', 'BMW 3 Series', 'Audi A4']
+      },
+      'Compact Hatchback': {
+        low: ['Toyota Corolla Hatchback (used)', 'Honda Fit (used)', 'Mazda3 Hatch (used)'],
+        mid: ['Toyota Corolla Hatchback', 'Mazda3 Hatchback', 'Honda Civic Hatchback'],
+        high: ['Volkswagen Golf GTI', 'Mini Cooper S', 'Mazda3 Turbo'],
+        lux: ['BMW 1 Series', 'Audi A3 Sportback', 'Volvo C40']
+      },
+      'Crossover SUV': {
+        low: ['Honda CR-V (used)', 'Toyota RAV4 (used)', 'Mazda CX-5 (used)'],
+        mid: ['Honda CR-V', 'Toyota RAV4', 'Mazda CX-5'],
+        high: ['Toyota RAV4 Hybrid Limited', 'Mazda CX-50', 'Hyundai Tucson Hybrid'],
+        lux: ['Lexus NX', 'BMW X3', 'Acura RDX']
+      },
+      'SUV / Minivan': {
+        low: ['Toyota Sienna (used)', 'Honda Pilot (used)', 'Toyota Highlander (used)'],
+        mid: ['Toyota Sienna Hybrid', 'Honda Odyssey', 'Kia Telluride (used)'],
+        high: ['Toyota Grand Highlander', 'Honda Pilot Elite', 'Kia Telluride'],
+        lux: ['Lexus GX', 'Acura MDX', 'Volvo XC90']
+      },
+      'SUV / Truck': {
+        low: ['Toyota 4Runner (used)', 'Jeep Wrangler (used)', 'Toyota Tacoma (used)'],
+        mid: ['Toyota 4Runner', 'Jeep Wrangler', 'Toyota Tacoma'],
+        high: ['Toyota Tacoma TRD Pro', 'Ford Bronco', 'Toyota 4Runner TRD Pro'],
+        lux: ['Land Rover Defender', 'Lexus GX', 'Jeep Wrangler Rubicon 392']
+      },
+      'Truck': {
+        low: ['Toyota Tacoma (used)', 'Ford F-150 (used)', 'Honda Ridgeline (used)'],
+        mid: ['Ford F-150', 'Toyota Tacoma', 'Chevy Silverado 1500'],
+        high: ['Ford F-150 Lariat', 'Toyota Tundra', 'Ram 1500 Big Horn'],
+        lux: ['Ford F-150 Platinum', 'Ram 1500 Limited', 'GMC Sierra Denali']
+      },
+      'Sport Sedan / Coupe': {
+        low: ['Mazda Miata (used)', 'Subaru BRZ (used)', 'Honda Civic Si (used)'],
+        mid: ['Mazda Miata', 'Subaru BRZ / Toyota GR86', 'Volkswagen GTI'],
+        high: ['Subaru WRX', 'Toyota GR Corolla', 'Honda Civic Type R'],
+        lux: ['BMW M340i', 'Audi S4', 'Porsche 718 Cayman (used)']
+      }
+    };
+
+    // Adjust for fuel preference
+    let adjustNote = '';
+    if (a.fuel === 'ev') {
+      adjustNote = 'Since you prefer EV, also consider: Tesla Model 3/Y, Hyundai Ioniq 5/6, Kia EV6, Chevy Equinox EV, Ford Mustang Mach-E.';
+    } else if (a.fuel === 'hybrid' && !style.includes('Hybrid')) {
+      adjustNote = 'For a hybrid version, look for the hybrid trim of your recommended model (e.g., RAV4 Hybrid, CR-V Hybrid, Camry Hybrid).';
+    }
+
+    const tier = a.budget || 'mid';
+    const list = (picks[style] && picks[style][tier]) || picks['Sedan / Crossover'][tier];
+
+    return { style, list, adjustNote, tier };
+  }
+
+  document.getElementById('getRec').addEventListener('click', () => {
+    const required = ['budget', 'size', 'commute', 'priority', 'fuel'];
+    const missing = required.filter(k => !answers[k]);
+    if (missing.length) {
+      alert('Please answer all questions first.');
+      return;
+    }
+    const rec = recommend(answers);
+    const tierLabel = { low: 'Under $20k', mid: '$20–35k', high: '$35–55k', lux: '$55k+' }[rec.tier];
+    const html = `
+      <h3>Recommended: ${rec.style}</h3>
+      <p>Based on your answers, here are three models to research in your <b>${tierLabel}</b> range:</p>
+      ${rec.list.map((m, i) => `
+        <div class="pick">
+          <div class="pick-name">${i + 1}. ${m}</div>
+          <div class="pick-meta">Look up reliability scores on Consumer Reports and TCO on Edmunds.</div>
+        </div>
+      `).join('')}
+      ${rec.adjustNote ? `<div class="tip">${rec.adjustNote}</div>` : ''}
+      <p style="margin-top:14px;color:var(--muted);font-size:0.88rem;">Next: head to the <b>Cost Calculator</b> tab to see what these would really cost per month.</p>
+    `;
+    const el = document.getElementById('quizResult');
+    el.innerHTML = html;
+    el.style.display = 'block';
+    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  });
+
+  // ---------- TCO Calculator ----------
+  function calculateTCO() {
+    const price = +document.getElementById('price').value || 0;
+    const down = +document.getElementById('down').value || 0;
+    const term = +document.getElementById('term').value || 60;
+    const apr = (+document.getElementById('apr').value || 0) / 100;
+    const miles = +document.getElementById('miles').value || 0;
+    const mpg = +document.getElementById('mpg').value || 30;
+    const gas = +document.getElementById('gas').value || 0;
+    const insurance = +document.getElementById('insurance').value || 0;
+    const maint = +document.getElementById('maint').value || 0;
+
+    const loanAmount = Math.max(0, price - down);
+    const monthlyRate = apr / 12;
+    let loanPayment = 0;
+    if (loanAmount > 0 && term > 0) {
+      if (monthlyRate === 0) loanPayment = loanAmount / term;
+      else loanPayment = loanAmount * monthlyRate / (1 - Math.pow(1 + monthlyRate, -term));
+    }
+
+    const annualFuel = (miles / Math.max(1, mpg)) * gas;
+    const monthlyFuel = annualFuel / 12;
+    const totalMonthly = loanPayment + monthlyFuel + insurance + maint;
+    const totalInterest = (loanPayment * term) - loanAmount;
+    const fiveYearCost = (totalMonthly * 60) + down;
+
+    const money = n => '$' + n.toLocaleString('en-US', { maximumFractionDigits: 0 });
+
+    const html = `
+      <h3>Your real monthly cost: ${money(totalMonthly)}</h3>
+      <div class="breakdown">
+        <div class="label">Loan payment</div><div class="val">${money(loanPayment)}/mo</div>
+        <div class="label">Fuel</div><div class="val">${money(monthlyFuel)}/mo</div>
+        <div class="label">Insurance</div><div class="val">${money(insurance)}/mo</div>
+        <div class="label">Maintenance</div><div class="val">${money(maint)}/mo</div>
+        <div class="label total-row">Total monthly</div><div class="val total-row">${money(totalMonthly)}/mo</div>
+      </div>
+      <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--border);">
+        <div class="breakdown">
+          <div class="label">Total interest paid</div><div class="val">${money(totalInterest)}</div>
+          <div class="label">5-year total cost</div><div class="val">${money(fiveYearCost)}</div>
+        </div>
+      </div>
+      <div class="tip" style="margin-top:14px;">
+        <b>Rule of thumb:</b> Total monthly car cost (including fuel + insurance) should ideally be under 15% of your take-home pay. Lenders will approve more — that doesn't mean it's a good idea.
+      </div>
+    `;
+    const el = document.getElementById('tcoResult');
+    el.innerHTML = html;
+    el.style.display = 'block';
+    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  document.getElementById('calcBtn').addEventListener('click', calculateTCO);
+
+  // Auto-recalc when any input changes after first calculation
+  ['price','down','term','apr','miles','mpg','gas','insurance','maint'].forEach(id => {
+    document.getElementById(id).addEventListener('input', () => {
+      if (document.getElementById('tcoResult').style.display === 'block') calculateTCO();
+    });
+  });
+</script>
+</body>
+</html>
