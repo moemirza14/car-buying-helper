@@ -3,171 +3,188 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Smart Car Buying Helper</title>
+<title>Hypercar &amp; Supercar Buying Helper</title>
 <style>
   :root {
-    --bg: #0f172a;
-    --bg-alt: #1e293b;
-    --card: #ffffff;
-    --text: #0f172a;
-    --muted: #64748b;
-    --accent: #2563eb;
-    --accent-hover: #1d4ed8;
-    --good: #16a34a;
-    --warn: #ea580c;
-    --bad: #dc2626;
-    --border: #e2e8f0;
+    --bg: #050608;
+    --bg-alt: #0c0e14;
+    --card: #11141c;
+    --card-2: #161a24;
+    --text: #f3f4f6;
+    --muted: #8a93a6;
+    --accent: #d4af37;        /* gold */
+    --accent-hover: #f0c850;
+    --accent-soft: rgba(212,175,55,0.12);
+    --good: #4ade80;
+    --warn: #fb923c;
+    --bad: #f87171;
+    --border: #1f2433;
+    --border-strong: #2b3145;
   }
   * { box-sizing: border-box; }
   body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+    background:
+      radial-gradient(1100px 600px at 80% -10%, rgba(212,175,55,0.10), transparent 60%),
+      radial-gradient(900px 500px at -10% 110%, rgba(120,80,200,0.12), transparent 60%),
+      linear-gradient(180deg, #050608 0%, #0a0b11 100%);
     min-height: 100vh;
     color: var(--text);
-    padding: 24px 16px;
+    padding: 28px 16px;
   }
-  .wrap {
-    max-width: 880px;
-    margin: 0 auto;
-  }
-  header {
-    text-align: center;
-    color: #fff;
-    margin-bottom: 28px;
+  .wrap { max-width: 920px; margin: 0 auto; }
+  header { text-align: center; margin-bottom: 28px; }
+  .badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    padding: 4px 12px;
+    border-radius: 999px;
+    margin-bottom: 14px;
   }
   header h1 {
     margin: 0 0 8px;
-    font-size: 2rem;
-    font-weight: 700;
+    font-size: 2.2rem;
+    font-weight: 800;
+    background: linear-gradient(180deg, #fff 0%, #c4c8d6 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
-  header p {
-    margin: 0;
-    opacity: 0.85;
-    font-size: 1rem;
-  }
+  header p { margin: 0; color: var(--muted); font-size: 1rem; max-width: 640px; margin-inline: auto; }
   .tabs {
     display: flex;
-    gap: 6px;
-    background: rgba(255, 255, 255, 0.1);
+    gap: 4px;
+    background: var(--card);
+    border: 1px solid var(--border);
     padding: 6px;
-    border-radius: 12px;
-    margin-bottom: 20px;
+    border-radius: 14px;
+    margin-bottom: 18px;
     overflow-x: auto;
   }
   .tab {
     flex: 1;
-    min-width: 140px;
-    padding: 10px 14px;
+    min-width: 150px;
+    padding: 12px 14px;
     background: transparent;
     border: none;
-    border-radius: 8px;
-    color: rgba(255, 255, 255, 0.7);
+    border-radius: 10px;
+    color: var(--muted);
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 0.92rem;
     cursor: pointer;
     transition: all 0.2s;
     white-space: nowrap;
+    font-family: inherit;
   }
-  .tab:hover { color: #fff; }
+  .tab:hover { color: var(--text); }
   .tab.active {
-    background: #fff;
-    color: var(--accent);
+    background: linear-gradient(180deg, var(--accent) 0%, #b58e1f 100%);
+    color: #1a1505;
   }
   .panel {
     background: var(--card);
-    border-radius: 14px;
-    padding: 28px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5);
     display: none;
   }
   .panel.active { display: block; }
   h2 {
     margin: 0 0 6px;
-    font-size: 1.4rem;
+    font-size: 1.5rem;
+    letter-spacing: -0.01em;
   }
-  .subtitle {
-    color: var(--muted);
-    margin: 0 0 24px;
-    font-size: 0.95rem;
-  }
-  .question {
-    margin-bottom: 22px;
-  }
+  .subtitle { color: var(--muted); margin: 0 0 24px; font-size: 0.95rem; }
+  .question { margin-bottom: 22px; }
   .question label {
     display: block;
     font-weight: 600;
     margin-bottom: 10px;
+    color: #e5e7eb;
   }
   .options {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
     gap: 8px;
   }
   .opt {
-    padding: 12px;
-    border: 2px solid var(--border);
-    border-radius: 8px;
-    background: #fff;
+    padding: 12px 14px;
+    border: 1px solid var(--border-strong);
+    border-radius: 10px;
+    background: var(--card-2);
     cursor: pointer;
     text-align: center;
     font-size: 0.9rem;
     transition: all 0.15s;
+    color: var(--text);
   }
-  .opt:hover { border-color: var(--accent); }
+  .opt:hover { border-color: var(--accent); transform: translateY(-1px); }
   .opt.selected {
     border-color: var(--accent);
-    background: #eff6ff;
+    background: var(--accent-soft);
     color: var(--accent);
     font-weight: 600;
   }
   input[type="number"], input[type="text"] {
     width: 100%;
-    padding: 10px 12px;
-    border: 2px solid var(--border);
-    border-radius: 8px;
+    padding: 11px 13px;
+    border: 1px solid var(--border-strong);
+    border-radius: 10px;
     font-size: 1rem;
     font-family: inherit;
+    background: var(--card-2);
+    color: var(--text);
   }
   input:focus { outline: none; border-color: var(--accent); }
   .btn {
-    background: var(--accent);
-    color: #fff;
+    background: linear-gradient(180deg, var(--accent) 0%, #b58e1f 100%);
+    color: #1a1505;
     border: none;
-    padding: 12px 24px;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-  .btn:hover { background: var(--accent-hover); }
-  .btn-secondary {
-    background: #fff;
-    color: var(--accent);
-    border: 2px solid var(--accent);
-  }
-  .btn-secondary:hover { background: #eff6ff; }
-  .result {
-    margin-top: 20px;
-    padding: 20px;
-    background: #f8fafc;
+    padding: 13px 26px;
     border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.2s;
+    font-family: inherit;
+    letter-spacing: 0.02em;
+  }
+  .btn:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(212,175,55,0.25); }
+  .result {
+    margin-top: 22px;
+    padding: 22px;
+    background: var(--card-2);
+    border-radius: 12px;
+    border: 1px solid var(--border-strong);
     border-left: 4px solid var(--accent);
   }
-  .result h3 {
-    margin: 0 0 12px;
-    color: var(--accent);
-  }
+  .result h3 { margin: 0 0 14px; color: var(--accent); font-size: 1.2rem; }
   .pick {
-    background: #fff;
-    padding: 14px;
-    border-radius: 8px;
+    background: var(--card);
+    padding: 16px;
+    border-radius: 10px;
     margin-bottom: 10px;
     border: 1px solid var(--border);
   }
-  .pick-name { font-weight: 700; font-size: 1.05rem; }
-  .pick-meta { color: var(--muted); font-size: 0.85rem; margin-top: 4px; }
+  .pick-name { font-weight: 700; font-size: 1.05rem; color: #fff; }
+  .pick-meta { color: var(--muted); font-size: 0.88rem; margin-top: 6px; line-height: 1.5; }
+  .pick-tags { margin-top: 8px; display: flex; gap: 6px; flex-wrap: wrap; }
+  .tag {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    border: 1px solid rgba(212,175,55,0.3);
+  }
   .calc-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -176,7 +193,7 @@
   }
   .calc-field label {
     display: block;
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     color: var(--muted);
     margin-bottom: 6px;
     font-weight: 500;
@@ -188,11 +205,11 @@
     margin-top: 12px;
   }
   .breakdown .label { color: var(--muted); }
-  .breakdown .val { font-weight: 600; text-align: right; }
+  .breakdown .val { font-weight: 600; text-align: right; color: #fff; }
   .total-row {
-    border-top: 2px solid var(--border);
-    padding-top: 10px;
-    margin-top: 8px;
+    border-top: 1px solid var(--border-strong);
+    padding-top: 12px;
+    margin-top: 10px;
     font-size: 1.1rem;
   }
   .total-row .val { color: var(--accent); }
@@ -202,242 +219,316 @@
     margin: 0;
   }
   .checklist li {
-    padding: 12px 14px;
+    padding: 13px 14px;
     margin-bottom: 8px;
-    background: #f8fafc;
-    border-radius: 8px;
+    background: var(--card-2);
+    border-radius: 10px;
     border-left: 4px solid var(--good);
     display: flex;
     align-items: flex-start;
-    gap: 10px;
+    gap: 11px;
+    line-height: 1.5;
   }
   .checklist li input[type="checkbox"] {
-    margin-top: 3px;
-    width: 18px;
-    height: 18px;
+    margin-top: 4px;
+    width: 17px;
+    height: 17px;
     cursor: pointer;
+    accent-color: var(--accent);
   }
-  .checklist li.flag { border-left-color: var(--bad); background: #fef2f2; }
-  .checklist li.warn { border-left-color: var(--warn); background: #fff7ed; }
+  .checklist li.flag { border-left-color: var(--bad); background: rgba(248,113,113,0.06); }
+  .checklist li.warn { border-left-color: var(--warn); background: rgba(251,146,60,0.06); }
   .section-title {
     font-weight: 700;
-    margin: 18px 0 8px;
-    color: var(--text);
+    margin: 22px 0 10px;
+    color: #fff;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
   }
   .tip {
-    background: #eff6ff;
+    background: var(--accent-soft);
     border-left: 4px solid var(--accent);
-    padding: 12px 14px;
-    border-radius: 6px;
-    margin: 12px 0;
+    padding: 13px 15px;
+    border-radius: 8px;
+    margin: 14px 0;
     font-size: 0.92rem;
+    color: #e5e7eb;
+    line-height: 1.55;
   }
+  .meta-card {
+    background: var(--card-2);
+    border: 1px solid var(--border-strong);
+    border-radius: 10px;
+    padding: 14px;
+    margin-top: 14px;
+    font-size: 0.9rem;
+    line-height: 1.55;
+    color: #d4d8e2;
+  }
+  .meta-card b { color: #fff; }
   footer {
     text-align: center;
-    color: rgba(255,255,255,0.6);
-    margin-top: 24px;
-    font-size: 0.85rem;
+    color: var(--muted);
+    margin-top: 26px;
+    font-size: 0.82rem;
   }
-  @media (max-width: 600px) {
-    header h1 { font-size: 1.5rem; }
-    .panel { padding: 18px; }
+  @media (max-width: 640px) {
+    header h1 { font-size: 1.55rem; }
+    .panel { padding: 20px; }
   }
 </style>
 </head>
 <body>
 <div class="wrap">
   <header>
-    <h1>Smart Car Buying Helper</h1>
-    <p>Find the right car, know the real cost, and walk into the dealership prepared.</p>
+    <div class="badge">Top-tier &amp; Hypercar</div>
+    <h1>Supercar Buying Helper</h1>
+    <p>Find the right hypercar, model the real cost of ownership, navigate dealer allocations, and inspect like a pro.</p>
   </header>
 
   <div class="tabs" role="tablist">
-    <button class="tab active" data-target="quiz">Quiz</button>
-    <button class="tab" data-target="tco">Cost Calculator</button>
-    <button class="tab" data-target="negotiate">Negotiation</button>
-    <button class="tab" data-target="used">Used Car Check</button>
+    <button class="tab active" data-target="quiz">Picker Quiz</button>
+    <button class="tab" data-target="tco">Ownership Cost</button>
+    <button class="tab" data-target="negotiate">Buying Strategy</button>
+    <button class="tab" data-target="used">PPI Checklist</button>
   </div>
 
   <!-- QUIZ PANEL -->
   <section id="quiz" class="panel active">
-    <h2>Lifestyle Quiz</h2>
-    <p class="subtitle">Answer a few quick questions to get a body-style recommendation with example models.</p>
+    <h2>Find Your Hypercar</h2>
+    <p class="subtitle">Six quick questions. The picker reasons through buyer type, budget tier, and use case.</p>
+
+    <div class="question" data-key="buyer">
+      <label>Who are you as a buyer?</label>
+      <div class="options">
+        <div class="opt" data-value="enthusiast">Driving enthusiast</div>
+        <div class="opt" data-value="investor">Collector / investor</div>
+        <div class="opt" data-value="first">First-time supercar buyer</div>
+      </div>
+    </div>
 
     <div class="question" data-key="budget">
-      <label>What's your total budget?</label>
+      <label>Budget tier?</label>
       <div class="options">
-        <div class="opt" data-value="low">Under $20k</div>
-        <div class="opt" data-value="mid">$20k–35k</div>
-        <div class="opt" data-value="high">$35k–55k</div>
-        <div class="opt" data-value="lux">$55k+</div>
+        <div class="opt" data-value="entry">$500k–1M (attainable hyper)</div>
+        <div class="opt" data-value="apex">$1M–3M (apex)</div>
+        <div class="opt" data-value="elite">$3M+ (elite / one-off)</div>
       </div>
     </div>
 
-    <div class="question" data-key="size">
-      <label>How many people do you typically carry?</label>
+    <div class="question" data-key="use">
+      <label>Primary use?</label>
       <div class="options">
-        <div class="opt" data-value="solo">1–2 (just me/partner)</div>
-        <div class="opt" data-value="small">3–4 (small family)</div>
-        <div class="opt" data-value="large">5+ (large family/group)</div>
+        <div class="opt" data-value="track">Track weapon</div>
+        <div class="opt" data-value="canyon">Canyon / weekend</div>
+        <div class="opt" data-value="gt">Grand touring</div>
+        <div class="opt" data-value="garage">Garage queen / store value</div>
       </div>
     </div>
 
-    <div class="question" data-key="commute">
-      <label>What's your daily driving like?</label>
+    <div class="question" data-key="brand">
+      <label>Brand DNA preference?</label>
       <div class="options">
-        <div class="opt" data-value="short">Short city trips</div>
-        <div class="opt" data-value="medium">Mixed city/highway</div>
-        <div class="opt" data-value="long">Long highway commute</div>
-        <div class="opt" data-value="rough">Rough roads / off-road</div>
-      </div>
-    </div>
-
-    <div class="question" data-key="priority">
-      <label>Top priority?</label>
-      <div class="options">
-        <div class="opt" data-value="economy">Fuel economy</div>
-        <div class="opt" data-value="cargo">Cargo / hauling</div>
-        <div class="opt" data-value="reliability">Reliability</div>
-        <div class="opt" data-value="fun">Fun to drive</div>
-      </div>
-    </div>
-
-    <div class="question" data-key="fuel">
-      <label>Fuel type preference?</label>
-      <div class="options">
-        <div class="opt" data-value="gas">Gasoline</div>
-        <div class="opt" data-value="hybrid">Hybrid</div>
-        <div class="opt" data-value="ev">Electric</div>
+        <div class="opt" data-value="italian">Italian (Ferrari/Lambo/Pagani)</div>
+        <div class="opt" data-value="german">German (Porsche/AMG)</div>
+        <div class="opt" data-value="british">British (McLaren/AM)</div>
         <div class="opt" data-value="any">No preference</div>
       </div>
     </div>
 
-    <button class="btn" id="getRec">Get My Recommendation</button>
+    <div class="question" data-key="power">
+      <label>Powertrain soul?</label>
+      <div class="options">
+        <div class="opt" data-value="v12na">NA V12 (analog)</div>
+        <div class="opt" data-value="flat6">Flat-6 (Porsche)</div>
+        <div class="opt" data-value="v8turbo">Twin-turbo V8</div>
+        <div class="opt" data-value="hybrid">Hybrid hypercar</div>
+        <div class="opt" data-value="ev">All-electric</div>
+      </div>
+    </div>
+
+    <div class="question" data-key="market">
+      <label>New or used?</label>
+      <div class="options">
+        <div class="opt" data-value="new">New allocation</div>
+        <div class="opt" data-value="used">Recent used (lower depreciation)</div>
+        <div class="opt" data-value="classic">Classic / appreciating</div>
+      </div>
+    </div>
+
+    <button class="btn" id="getRec">Get My Shortlist</button>
 
     <div id="quizResult" class="result" style="display:none;"></div>
   </section>
 
   <!-- TCO PANEL -->
   <section id="tco" class="panel">
-    <h2>Total Cost of Ownership</h2>
-    <p class="subtitle">The sticker price is only part of the story. See your real monthly cost.</p>
+    <h2>True Cost of Ownership</h2>
+    <p class="subtitle">At this level, depreciation dwarfs every other cost — and a smart pick can actually appreciate. Model it before you buy.</p>
 
     <div class="calc-grid">
       <div class="calc-field">
-        <label>Car price ($)</label>
-        <input type="number" id="price" value="25000" min="0" />
+        <label>Purchase price ($)</label>
+        <input type="number" id="price" value="500000" min="0" />
       </div>
       <div class="calc-field">
-        <label>Down payment ($)</label>
-        <input type="number" id="down" value="3000" min="0" />
+        <label>Market premium / ADM ($)</label>
+        <input type="number" id="adm" value="0" min="0" />
       </div>
       <div class="calc-field">
-        <label>Loan term (months)</label>
-        <input type="number" id="term" value="60" min="12" max="84" />
+        <label>Holding period (years)</label>
+        <input type="number" id="years" value="5" min="1" max="30" />
       </div>
       <div class="calc-field">
-        <label>Interest rate (% APR)</label>
-        <input type="number" id="apr" value="7" min="0" step="0.1" />
+        <label>Annual value change (%) — negative = depreciation</label>
+        <input type="number" id="depr" value="-8" step="0.5" />
+      </div>
+      <div class="calc-field">
+        <label>Annual service ($)</label>
+        <input type="number" id="service" value="6000" min="0" />
+      </div>
+      <div class="calc-field">
+        <label>Annual insurance ($)</label>
+        <input type="number" id="insurance" value="10000" min="0" />
+      </div>
+      <div class="calc-field">
+        <label>Annual storage / garage ($)</label>
+        <input type="number" id="storage" value="3600" min="0" />
       </div>
       <div class="calc-field">
         <label>Miles driven per year</label>
-        <input type="number" id="miles" value="12000" min="0" />
+        <input type="number" id="miles" value="2000" min="0" />
       </div>
       <div class="calc-field">
         <label>Fuel economy (MPG)</label>
-        <input type="number" id="mpg" value="30" min="1" />
+        <input type="number" id="mpg" value="14" min="1" />
       </div>
       <div class="calc-field">
-        <label>Gas price ($/gallon)</label>
-        <input type="number" id="gas" value="3.50" min="0" step="0.01" />
+        <label>Premium fuel ($/gal)</label>
+        <input type="number" id="gas" value="5.50" min="0" step="0.01" />
       </div>
       <div class="calc-field">
-        <label>Monthly insurance ($)</label>
-        <input type="number" id="insurance" value="120" min="0" />
+        <label>Tire set cost ($)</label>
+        <input type="number" id="tirecost" value="4000" min="0" />
       </div>
       <div class="calc-field">
-        <label>Monthly maintenance ($)</label>
-        <input type="number" id="maint" value="60" min="0" />
+        <label>Tire life (miles)</label>
+        <input type="number" id="tirelife" value="8000" min="100" />
       </div>
     </div>
 
-    <button class="btn" id="calcBtn">Calculate</button>
+    <button class="btn" id="calcBtn">Model Total Cost</button>
 
     <div id="tcoResult" class="result" style="display:none;"></div>
   </section>
 
-  <!-- NEGOTIATION PANEL -->
+  <!-- BUYING STRATEGY PANEL -->
   <section id="negotiate" class="panel">
-    <h2>Negotiation Prep</h2>
-    <p class="subtitle">Research first. Talk price, not payments. Walk away if it doesn't feel right.</p>
+    <h2>Buying Strategy</h2>
+    <p class="subtitle">Allocation game, market premium, auction, or private — the playbook is different from buying a normal car.</p>
 
-    <div class="section-title">Before you go (research)</div>
+    <div class="section-title">If you're chasing a new allocation</div>
     <ul class="checklist">
-      <li><input type="checkbox" /><span><b>Know the invoice price.</b> Use Kelley Blue Book, Edmunds, and TrueCar to find what dealers paid. Aim 2–5% above invoice on a new car.</span></li>
-      <li><input type="checkbox" /><span><b>Get pre-approved financing</b> from your bank or credit union <i>before</i> visiting. Dealer financing should beat this rate to win your business.</span></li>
-      <li><input type="checkbox" /><span><b>Research market value</b> of your trade-in separately (KBB private party value is higher than trade-in value).</span></li>
-      <li><input type="checkbox" /><span><b>Email 3–5 dealers</b> with the exact trim/options you want. Ask for an "out-the-door" price. Use lower offers as leverage.</span></li>
-      <li><input type="checkbox" /><span><b>Time it right.</b> End of month, end of quarter, and end of year are when dealers chase quotas.</span></li>
+      <li><input type="checkbox" /><span><b>Build the dealer relationship first.</b> Ferrari, Porsche GT, and McLaren allocations go to known clients. Buy a "lesser" car or two from the dealer before you ask for the special.</span></li>
+      <li><input type="checkbox" /><span><b>Service your car at the dealer.</b> It signals loyalty and keeps you on the radar.</span></li>
+      <li class="warn"><input type="checkbox" /><span><b>Do not flip an allocation.</b> Ferrari will blacklist you and so will Porsche from future GT cars. Hold at least 12–24 months, ideally longer.</span></li>
+      <li><input type="checkbox" /><span><b>Spec for resale, not just for you.</b> Rosso Corsa / nero / yellow brake calipers / carbon — boring sells fast. Wild specs sit.</span></li>
+      <li><input type="checkbox" /><span><b>Understand "non-refundable deposit" terms.</b> Production slots can slip 12–18 months — make sure your money isn't locked in indefinitely.</span></li>
     </ul>
 
-    <div class="section-title">At the dealership</div>
+    <div class="section-title">If you're buying used (recent / nearly-new)</div>
     <ul class="checklist">
-      <li><input type="checkbox" /><span><b>Negotiate the out-the-door price</b>, not the monthly payment. Monthly-payment negotiation hides longer loans and add-ons.</span></li>
-      <li><input type="checkbox" /><span><b>Keep trade-in, financing, and price separate.</b> Dealers shift profit between these — solve them one at a time.</span></li>
-      <li><input type="checkbox" /><span><b>Decline the F&I office extras</b> (extended warranty, paint sealant, GAP insurance, VIN etching) unless you've priced them elsewhere. You can buy GAP from your insurer for much less.</span></li>
-      <li><input type="checkbox" /><span><b>Read every line of the contract.</b> Watch for "doc fees" above $200, fake "market adjustments," and pre-checked add-ons.</span></li>
-      <li><input type="checkbox" /><span><b>Be ready to walk away.</b> If a deal isn't right, leave. There will be another car at another dealer.</span></li>
+      <li><input type="checkbox" /><span><b>The used market is often cheaper than new + ADM.</b> A 6-month-old car with 1,200 miles routinely sells for 70–85% of MSRP+markup. Patience pays.</span></li>
+      <li><input type="checkbox" /><span><b>Pull the full service history before talking price.</b> Missed services on a Ferrari or McLaren is a $5k–15k catch-up bill and a red flag.</span></li>
+      <li><input type="checkbox" /><span><b>Always do a PPI</b> at a brand specialist independent shop. Check the PPI tab — $500–1,500 spent here can save you $30k+.</span></li>
+      <li class="warn"><input type="checkbox" /><span><b>Check title and accident history</b> with multiple services (Carfax, AutoCheck, plus marque-specific records). Salvage or rebuilt = walk away unless it's priced 40%+ below market.</span></li>
+      <li><input type="checkbox" /><span><b>Verify warranty transfer.</b> Most factory warranties transfer to subsequent owners but some extended/CPO warranties don't — confirm in writing.</span></li>
+    </ul>
+
+    <div class="section-title">If you're buying classic / appreciating</div>
+    <ul class="checklist">
+      <li><input type="checkbox" /><span><b>Provenance is the asset.</b> Matching numbers (engine, gearbox, body), original color combo, documented ownership, factory build sheet, magazine features — these multiply value.</span></li>
+      <li><input type="checkbox" /><span><b>Use the major auction houses</b> (RM Sotheby's, Gooding, Bonhams) for transparent pricing and chain-of-custody. Or work with a recognized marque specialist broker.</span></li>
+      <li><input type="checkbox" /><span><b>Get a marque expert PPI</b> — not a generic shop. A Ferrari Classiche / Porsche Heritage Authentication adds value when present.</span></li>
+      <li class="warn"><input type="checkbox" /><span><b>Beware "restomods" and over-restorations.</b> Original survivors with documented history outvalue anything refreshed. Untouched is the gold standard.</span></li>
+    </ul>
+
+    <div class="section-title">When the contract is in front of you</div>
+    <ul class="checklist">
+      <li><input type="checkbox" /><span><b>Wire transfer only</b> for the final payment. Confirm wiring instructions by phone using a number you independently found (not from the email). Wire fraud is rampant at this price point.</span></li>
+      <li><input type="checkbox" /><span><b>Escrow is your friend</b> for private-party deals. Services like Escrow.com handle title transfer for ~0.5%.</span></li>
+      <li><input type="checkbox" /><span><b>Out-of-state purchases:</b> understand sales tax in your registration state, not the seller's state. Plan transport ($1,500–4,000 enclosed, never open trailer).</span></li>
+      <li><input type="checkbox" /><span><b>Insurance binder before delivery.</b> Specialty insurers (Hagerty, Chubb, Pure, Grundy) understand agreed-value policies — required at this level.</span></li>
     </ul>
 
     <div class="tip">
-      <b>Red flag phrases:</b> "What payment do you want to be at?" — "We can only do this deal today." — "Let me check with my manager" (theatrical anchoring). Stay focused on the out-the-door number.
+      <b>Red flag phrases to ignore:</b> "Pre-sold, but the buyer fell through" — "Off-market deal, no PPI needed" — "Wire to my agent's account, not the dealer." Walk away. There is always another car.
     </div>
   </section>
 
-  <!-- USED CAR PANEL -->
+  <!-- PPI PANEL -->
   <section id="used" class="panel">
-    <h2>Used Car Inspection</h2>
-    <p class="subtitle">A 20-minute walkaround can save you thousands. Always get a pre-purchase inspection from an independent mechanic.</p>
+    <h2>Pre-Purchase Inspection</h2>
+    <p class="subtitle">Marque-specific failure modes. A PPI at a brand specialist costs $500–1,500 and routinely uncovers $30k+ issues. Never skip it.</p>
 
-    <div class="section-title">Documents (do this first)</div>
+    <div class="section-title">Documents first (always)</div>
     <ul class="checklist">
-      <li><input type="checkbox" /><span><b>Vehicle history report</b> (Carfax or AutoCheck) — look for accidents, salvage title, odometer rollback, and number of owners.</span></li>
-      <li><input type="checkbox" /><span><b>Match the VIN</b> on the dashboard, door jamb, and title — they must all match.</span></li>
-      <li><input type="checkbox" /><span><b>Service records</b> — regular oil changes and dealer stamps are a green flag.</span></li>
+      <li><input type="checkbox" /><span><b>Full service history</b> — every annual or major service, every fluid change, dealer or marque specialist only. Gaps = price down or walk.</span></li>
+      <li><input type="checkbox" /><span><b>Title check + accident report.</b> Use Carfax, AutoCheck, and marque-specific clubs (Ferrari Chat, Rennlist, McLaren Life forum cross-reference).</span></li>
+      <li><input type="checkbox" /><span><b>Manufacturer build sheet</b> — confirms factory spec, options, original color. Ferrari, Porsche, and McLaren can pull these.</span></li>
+      <li><input type="checkbox" /><span><b>Warranty / extended coverage status</b> — get it in writing. Ferrari Power, Porsche CPO, McLaren Qualified all transfer with conditions.</span></li>
     </ul>
 
-    <div class="section-title">Exterior walkaround</div>
+    <div class="section-title">Ferrari-specific (V8 turbo era: 488, F8, 296)</div>
     <ul class="checklist">
-      <li><input type="checkbox" /><span>Check panel gaps — uneven gaps suggest prior collision repair.</span></li>
-      <li class="warn"><input type="checkbox" /><span>Paint mismatch under sunlight or runs/orange peel texture = repaint after an accident.</span></li>
-      <li><input type="checkbox" /><span>Tires: even tread wear across all four. Uneven wear = alignment or suspension issues.</span></li>
-      <li class="flag"><input type="checkbox" /><span><b>Rust on frame, subframe, or rocker panels</b> is a deal-breaker. Surface rust on bolts is normal.</span></li>
+      <li class="flag"><input type="checkbox" /><span><b>Exhaust manifold cracks</b> on 488 / F8 — a known failure. Listen for ticking on cold start. Out-of-warranty repair is $8–15k.</span></li>
+      <li class="warn"><input type="checkbox" /><span><b>Sticky buttons / interior trim</b> — older Ferraris (430, 458 era) develop rubberized-plastic decay. Full refurb is $3–8k.</span></li>
+      <li><input type="checkbox" /><span><b>Annual service compliance</b> — Ferrari requires it. Missed = warranty issues and a $2–5k catch-up bill.</span></li>
     </ul>
 
-    <div class="section-title">Under the hood</div>
+    <div class="section-title">Ferrari-specific (V12: 812, F12, Aperta)</div>
     <ul class="checklist">
-      <li class="flag"><input type="checkbox" /><span><b>Milky oil cap</b> = head gasket failure. Walk away.</span></li>
-      <li class="warn"><input type="checkbox" /><span>Brown/burnt transmission fluid (should be pink/red) = neglected maintenance.</span></li>
-      <li><input type="checkbox" /><span>No oil leaks on the ground or engine bay.</span></li>
-      <li><input type="checkbox" /><span>Battery terminals clean, no corrosion.</span></li>
+      <li class="warn"><input type="checkbox" /><span><b>Clutch wear</b> on F1 single-clutch cars (older V12s). Used clutches can be 30–60% worn; replacement is $5–8k.</span></li>
+      <li><input type="checkbox" /><span><b>Major service interval</b> — every 5 years / 30k km, V12 timing belts/chains and cam variators. Budget $5–10k.</span></li>
     </ul>
 
-    <div class="section-title">Test drive</div>
+    <div class="section-title">Lamborghini-specific (Aventador / Huracán / Revuelto)</div>
     <ul class="checklist">
-      <li><input type="checkbox" /><span>Cold start — listen for knocking, ticking, or grinding.</span></li>
-      <li class="warn"><input type="checkbox" /><span>Steering wheel pulls left or right when hands off = alignment issue (cheap) or frame damage (expensive).</span></li>
-      <li class="warn"><input type="checkbox" /><span>Vibration at 60+ mph = warped rotors or tire balance issue.</span></li>
-      <li class="flag"><input type="checkbox" /><span><b>Transmission slipping, harsh shifts, or delayed engagement</b> on a 5+ year old car = potentially $3k–6k repair.</span></li>
-      <li><input type="checkbox" /><span>All electronics work: windows, locks, AC, heat, infotainment, backup camera.</span></li>
-      <li class="flag"><input type="checkbox" /><span><b>Check engine light on or recently cleared</b> (no engine codes when scanned) = something is being hidden.</span></li>
+      <li class="warn"><input type="checkbox" /><span><b>Aventador ISR gearbox harshness</b> in town — this is normal. Confirm it's harsh-but-consistent, not slipping.</span></li>
+      <li><input type="checkbox" /><span><b>V12 valve adjustment</b> (Aventador) — expensive scheduled service. Verify it's been done within the service interval.</span></li>
+      <li class="warn"><input type="checkbox" /><span><b>Carbon ceramic brakes</b> — inspect for cracks and measure thickness. Replacement set is $15–25k.</span></li>
+    </ul>
+
+    <div class="section-title">McLaren-specific (720S, 765LT, Artura, Senna)</div>
+    <ul class="checklist">
+      <li class="flag"><input type="checkbox" /><span><b>Coolant leaks</b> on 720S / 765LT — header pipe and radiator hoses. A leaking car can cook the engine. Inspect carefully under the bonnet and rear deck.</span></li>
+      <li class="warn"><input type="checkbox" /><span><b>Electronics gremlins</b> — McLaren infotainment and module quirks are common. Confirm every system works (lift, dihedral doors, suspension modes).</span></li>
+      <li><input type="checkbox" /><span><b>Carbon tub condition</b> — visually inspect lower edges for cracking or impact marks. The tub is the chassis; damage = total.</span></li>
+    </ul>
+
+    <div class="section-title">Porsche-specific (GT2 RS, GT3 RS, 918 Spyder)</div>
+    <ul class="checklist">
+      <li><input type="checkbox" /><span><b>Track use disclosure</b> — many GT cars see track time. Not a deal-breaker, but priced accordingly. Ask for track-day records.</span></li>
+      <li class="warn"><input type="checkbox" /><span><b>918 high-voltage battery health</b> — degrades with age. Porsche can run a diagnostic. Replacement battery pack is six figures.</span></li>
+      <li><input type="checkbox" /><span><b>PCCB brake thickness</b> — measure rotor thickness, check for cracks. Replacement set is $25–35k.</span></li>
+    </ul>
+
+    <div class="section-title">Universal hypercar checks</div>
+    <ul class="checklist">
+      <li class="flag"><input type="checkbox" /><span><b>Paint thickness gauge sweep</b> — every panel. Repaint = prior accident. Anomalies = repaired panel. This is non-negotiable.</span></li>
+      <li><input type="checkbox" /><span><b>Underbody / splitter / diffuser</b> — speed bumps, curb strikes, and track scrapes are common. Carbon damage is expensive.</span></li>
+      <li class="warn"><input type="checkbox" /><span><b>OBD scan for stored codes</b> — even cleared codes leave a trail in some systems. A "clean" car with recent clears is suspicious.</span></li>
+      <li><input type="checkbox" /><span><b>Dyno or extended test drive</b> — verify power output and full rev range. Boost issues on twin-turbo cars hide at low rpm.</span></li>
+      <li class="flag"><input type="checkbox" /><span><b>Flood and salt exposure</b> — coastal cars, Florida, gulf states. Inspect every aluminum and carbon surface for corrosion and salt residue underneath.</span></li>
     </ul>
 
     <div class="tip">
-      <b>Always:</b> Get a pre-purchase inspection (PPI) at an independent mechanic before signing. Costs $100–200 and routinely catches $1,000+ problems. If the seller refuses a PPI, walk away.
+      <b>Always:</b> PPI at an independent brand specialist, not the selling dealer. Get findings in writing. If the seller refuses a PPI, the answer is no. The car you're missing isn't worth the one that ruins you.
     </div>
   </section>
 
-  <footer>Built as a static site — runs entirely in your browser.</footer>
+  <footer>Static site · runs in your browser · no data leaves your device</footer>
 </div>
 
 <script>
@@ -464,104 +555,122 @@
     });
   });
 
-  // Body-style recommendation logic + example models per budget tier.
+  /*
+    Model database — keyed roughly by [budget tier][brand/powertrain bucket].
+    Each entry: name, tags (use cases it suits), notes (why it fits).
+    The picker scores against the user's answers.
+  */
+  const catalog = [
+    // Entry hyper ($500k-1M)
+    { name: 'Porsche 911 GT3 RS (992)', tier:'entry', brand:'german', power:'flat6', use:['track','canyon'], market:['new','used'], notes:'Track tool first, road car second. Hardest to allocate; used trades over MSRP.' },
+    { name: 'Porsche 911 Turbo S (992)', tier:'entry', brand:'german', power:'flat6', use:['canyon','gt'], market:['new','used'], notes:'All-weather hyper-grand-tourer. Subtle, brutally fast, depreciates predictably.' },
+    { name: 'Ferrari 296 GTB', tier:'entry', brand:'italian', power:'hybrid', use:['canyon','gt','track'], market:['new','used'], notes:'V6 hybrid. Lighter, sharper, more agile than 488/F8. Allocation game applies.' },
+    { name: 'Ferrari F8 Tributo / Spider', tier:'entry', brand:'italian', power:'v8turbo', use:['canyon','gt'], market:['used'], notes:'Last great Ferrari V8 turbo. Used market is reasonable now; watch exhaust manifolds.' },
+    { name: 'Lamborghini Huracán STO / Tecnica', tier:'entry', brand:'italian', power:'v8turbo', use:['track','canyon'], market:['new','used'], notes:'NA V10 swan song. STO is track-focused, Tecnica is the dual-purpose pick.' },
+    { name: 'McLaren 765LT', tier:'entry', brand:'british', power:'v8turbo', use:['track','canyon'], market:['used'], notes:'Limited LT — analog feel, telepathic steering. Watch for coolant leaks.' },
+    { name: 'Aston Martin Vantage / DBS 770', tier:'entry', brand:'british', power:'v8turbo', use:['gt','canyon'], market:['new','used'], notes:'Less common than Ferrari/McLaren. Excellent GT character; weaker resale.' },
+    { name: 'Mercedes-AMG GT Black Series', tier:'entry', brand:'german', power:'v8turbo', use:['track','canyon'], market:['used'], notes:'Flat-plane V8 monster. Limited production — already appreciating.' },
+    { name: 'Tesla Roadster (when delivered) / Lucid Sapphire', tier:'entry', brand:'any', power:'ev', use:['gt','canyon'], market:['new','used'], notes:'EV hypercar territory. Sapphire is here and brutally fast; Roadster pending.' },
+
+    // Apex ($1M-3M)
+    { name: 'Ferrari SF90 Stradale / XX', tier:'apex', brand:'italian', power:'hybrid', use:['track','canyon'], market:['new','used'], notes:'1000hp hybrid V8. XX is the track-only halo. Allocation territory.' },
+    { name: 'Ferrari 812 Competizione', tier:'apex', brand:'italian', power:'v12na', use:['canyon','gt','garage'], market:['used','new'], notes:'NA V12 swan song from Maranello. Already collector-grade; will appreciate.' },
+    { name: 'Ferrari Monza SP1 / SP2', tier:'apex', brand:'italian', power:'v12na', use:['canyon','garage'], market:['used'], notes:'Icona series, no windshield. Pure collector piece — appreciation play.' },
+    { name: 'Lamborghini Revuelto', tier:'apex', brand:'italian', power:'hybrid', use:['canyon','gt'], market:['new'], notes:'V12 hybrid successor to Aventador. Allocation only; long wait list.' },
+    { name: 'Lamborghini Sián FKP 37', tier:'apex', brand:'italian', power:'hybrid', use:['garage'], market:['used'], notes:'63 units. Appreciation play, not a driver.' },
+    { name: 'McLaren Senna', tier:'apex', brand:'british', power:'v8turbo', use:['track','garage'], market:['used'], notes:'Track day extremist. Brutally fast on circuit, terrible on bumpy roads.' },
+    { name: 'McLaren Speedtail', tier:'apex', brand:'british', power:'hybrid', use:['gt','garage'], market:['used'], notes:'250mph three-seat hyper-GT. 106 units. Not road-legal in US without show-and-display.' },
+    { name: 'Porsche 918 Spyder', tier:'apex', brand:'german', power:'hybrid', use:['canyon','gt','garage'], market:['used'], notes:'OG holy trinity car. Carefully appreciating; check HV battery health.' },
+    { name: 'Mercedes-AMG One', tier:'apex', brand:'german', power:'hybrid', use:['track','garage'], market:['used'], notes:'F1-derived 1.6L V6 hybrid. 275 units. Service intervals are brutal.' },
+    { name: 'Rimac Nevera', tier:'apex', brand:'any', power:'ev', use:['canyon','garage'], market:['new','used'], notes:'Fastest accelerating production car. EV hypercar benchmark.' },
+
+    // Elite ($3M+)
+    { name: 'Ferrari LaFerrari / Aperta', tier:'elite', brand:'italian', power:'hybrid', use:['canyon','garage'], market:['used'], notes:'Holy trinity hybrid V12. Aperta version is rarer and more valuable.' },
+    { name: 'Ferrari F40', tier:'elite', brand:'italian', power:'v8turbo', use:['canyon','garage'], market:['classic'], notes:'The icon. Twin-turbo V8, manual, no driver aids. Top of any collection.' },
+    { name: 'Ferrari F50', tier:'elite', brand:'italian', power:'v12na', use:['canyon','garage'], market:['classic'], notes:'F1-derived V12, gated manual. The connoisseur’s halo Ferrari.' },
+    { name: 'Pagani Huayra BC / R / Codalunga', tier:'elite', brand:'italian', power:'v12na', use:['canyon','garage'], market:['used','new'], notes:'AMG V12, bespoke build. Codalunga is a 5-unit special. Pure exclusivity.' },
+    { name: 'Pagani Utopia', tier:'elite', brand:'italian', power:'v12na', use:['canyon','gt'], market:['new'], notes:'Manual NA V12 in 2025. 99 units. Allocation is family-only.' },
+    { name: 'Bugatti Chiron Super Sport / Mistral', tier:'elite', brand:'any', power:'v8turbo', use:['gt','garage'], market:['new','used'], notes:'Quad-turbo W16 finale. Mistral is the open-top swansong.' },
+    { name: 'Bugatti Tourbillon', tier:'elite', brand:'any', power:'hybrid', use:['gt','garage'], market:['new'], notes:'Successor to Chiron. NA V16 hybrid. 250 units, all sold.' },
+    { name: 'McLaren P1 / P1 GTR', tier:'elite', brand:'british', power:'hybrid', use:['track','garage'], market:['used'], notes:'Holy trinity entry. GTR is track-only with $20k+/day support events.' },
+    { name: 'Koenigsegg Jesko / Gemera / CC850', tier:'elite', brand:'any', power:'v8turbo', use:['track','garage'], market:['new','used'], notes:'Engineering theater. CC850 is the manual revival. Tiny production runs.' }
+  ];
+
   function recommend(a) {
-    // Decide body style
-    let style;
-    if (a.size === 'large') style = 'SUV / Minivan';
-    else if (a.commute === 'rough') style = 'SUV / Truck';
-    else if (a.priority === 'cargo') style = a.size === 'small' ? 'Crossover SUV' : 'Truck';
-    else if (a.priority === 'fun') style = 'Sport Sedan / Coupe';
-    else if (a.commute === 'short' && a.priority === 'economy') style = 'Compact Hatchback';
-    else if (a.priority === 'economy') style = 'Sedan / Hybrid';
-    else style = 'Sedan / Crossover';
+    const tier = a.budget;
+    const candidates = catalog.filter(c => c.tier === tier);
 
-    // Picks by style + budget tier
-    const picks = {
-      'Sedan / Hybrid': {
-        low: ['Toyota Corolla Hybrid (used)', 'Honda Insight (used)', 'Hyundai Elantra Hybrid (used)'],
-        mid: ['Toyota Camry Hybrid', 'Honda Accord Hybrid', 'Hyundai Sonata Hybrid'],
-        high: ['Toyota Crown', 'Lexus ES Hybrid (used)', 'Honda Accord Touring Hybrid'],
-        lux: ['Lexus ES 300h', 'BMW 530e', 'Mercedes E-Class Hybrid']
-      },
-      'Sedan / Crossover': {
-        low: ['Toyota Corolla (used)', 'Honda Civic (used)', 'Mazda3 (used)'],
-        mid: ['Honda Civic / Accord', 'Toyota Corolla / Camry', 'Mazda3'],
-        high: ['Honda Accord Touring', 'Toyota Camry XSE', 'Mazda6 (used)'],
-        lux: ['Lexus IS', 'BMW 3 Series', 'Audi A4']
-      },
-      'Compact Hatchback': {
-        low: ['Toyota Corolla Hatchback (used)', 'Honda Fit (used)', 'Mazda3 Hatch (used)'],
-        mid: ['Toyota Corolla Hatchback', 'Mazda3 Hatchback', 'Honda Civic Hatchback'],
-        high: ['Volkswagen Golf GTI', 'Mini Cooper S', 'Mazda3 Turbo'],
-        lux: ['BMW 1 Series', 'Audi A3 Sportback', 'Volvo C40']
-      },
-      'Crossover SUV': {
-        low: ['Honda CR-V (used)', 'Toyota RAV4 (used)', 'Mazda CX-5 (used)'],
-        mid: ['Honda CR-V', 'Toyota RAV4', 'Mazda CX-5'],
-        high: ['Toyota RAV4 Hybrid Limited', 'Mazda CX-50', 'Hyundai Tucson Hybrid'],
-        lux: ['Lexus NX', 'BMW X3', 'Acura RDX']
-      },
-      'SUV / Minivan': {
-        low: ['Toyota Sienna (used)', 'Honda Pilot (used)', 'Toyota Highlander (used)'],
-        mid: ['Toyota Sienna Hybrid', 'Honda Odyssey', 'Kia Telluride (used)'],
-        high: ['Toyota Grand Highlander', 'Honda Pilot Elite', 'Kia Telluride'],
-        lux: ['Lexus GX', 'Acura MDX', 'Volvo XC90']
-      },
-      'SUV / Truck': {
-        low: ['Toyota 4Runner (used)', 'Jeep Wrangler (used)', 'Toyota Tacoma (used)'],
-        mid: ['Toyota 4Runner', 'Jeep Wrangler', 'Toyota Tacoma'],
-        high: ['Toyota Tacoma TRD Pro', 'Ford Bronco', 'Toyota 4Runner TRD Pro'],
-        lux: ['Land Rover Defender', 'Lexus GX', 'Jeep Wrangler Rubicon 392']
-      },
-      'Truck': {
-        low: ['Toyota Tacoma (used)', 'Ford F-150 (used)', 'Honda Ridgeline (used)'],
-        mid: ['Ford F-150', 'Toyota Tacoma', 'Chevy Silverado 1500'],
-        high: ['Ford F-150 Lariat', 'Toyota Tundra', 'Ram 1500 Big Horn'],
-        lux: ['Ford F-150 Platinum', 'Ram 1500 Limited', 'GMC Sierra Denali']
-      },
-      'Sport Sedan / Coupe': {
-        low: ['Mazda Miata (used)', 'Subaru BRZ (used)', 'Honda Civic Si (used)'],
-        mid: ['Mazda Miata', 'Subaru BRZ / Toyota GR86', 'Volkswagen GTI'],
-        high: ['Subaru WRX', 'Toyota GR Corolla', 'Honda Civic Type R'],
-        lux: ['BMW M340i', 'Audi S4', 'Porsche 718 Cayman (used)']
-      }
-    };
+    // Score each candidate
+    const scored = candidates.map(c => {
+      let s = 0;
+      if (a.brand && (c.brand === a.brand || a.brand === 'any')) s += 3;
+      if (a.power && c.power === a.power) s += 3;
+      if (a.use && c.use.includes(a.use)) s += 2;
+      if (a.market && c.market.includes(a.market)) s += 2;
 
-    // Adjust for fuel preference
-    let adjustNote = '';
-    if (a.fuel === 'ev') {
-      adjustNote = 'Since you prefer EV, also consider: Tesla Model 3/Y, Hyundai Ioniq 5/6, Kia EV6, Chevy Equinox EV, Ford Mustang Mach-E.';
-    } else if (a.fuel === 'hybrid' && !style.includes('Hybrid')) {
-      adjustNote = 'For a hybrid version, look for the hybrid trim of your recommended model (e.g., RAV4 Hybrid, CR-V Hybrid, Camry Hybrid).';
+      // Buyer-type nudges
+      if (a.buyer === 'investor' && (c.use.includes('garage') || c.market.includes('classic'))) s += 2;
+      if (a.buyer === 'enthusiast' && (c.use.includes('track') || c.use.includes('canyon'))) s += 1;
+      if (a.buyer === 'first' && (c.brand === 'german' || c.power === 'flat6')) s += 2; // Porsche 911 ecosystem is friendliest
+
+      return { ...c, score: s };
+    });
+
+    scored.sort((x, y) => y.score - x.score);
+    return scored.slice(0, 3);
+  }
+
+  function buyerGuidance(a) {
+    const lines = [];
+    if (a.buyer === 'first') {
+      lines.push('<b>First-timer note:</b> Start with Porsche if possible — the support ecosystem, parts availability, and lower ownership friction make it the easiest entry. Avoid 6-figure annual services as your first lesson.');
     }
-
-    const tier = a.budget || 'mid';
-    const list = (picks[style] && picks[style][tier]) || picks['Sedan / Crossover'][tier];
-
-    return { style, list, adjustNote, tier };
+    if (a.buyer === 'investor') {
+      lines.push('<b>Investor angle:</b> Limited production + manual gearbox + NA engine + collector marque (Ferrari, Pagani, Koenigsegg) historically outperforms. Mileage matters — sub-1,000 mi/yr preserves value.');
+    }
+    if (a.buyer === 'enthusiast') {
+      lines.push('<b>Enthusiast angle:</b> The car you drive is worth more than the car that sits. Pick what feels right and accept the depreciation as the price of joy — most "investments" at this level are mediocre returns net of carrying cost.');
+    }
+    if (a.market === 'new') {
+      lines.push('<b>Allocation reality:</b> Specialty allocations (Ferrari Icona, Porsche GT, McLaren Ultimate) require existing client relationships. Plan a 1–3 year runway buying "regular" cars first.');
+    }
+    if (a.market === 'used' && a.budget === 'entry') {
+      lines.push('<b>Used in this tier:</b> The 6–18 month nearly-new market is the sweet spot. First owner ate 15–25% depreciation; you skip the ADM. Verify warranty transfer.');
+    }
+    if (a.market === 'classic') {
+      lines.push('<b>Classic strategy:</b> Provenance trumps condition. Documented history, matching numbers, original spec, period photos — these multiply value 2–3x over an equivalent unverified car.');
+    }
+    return lines;
   }
 
   document.getElementById('getRec').addEventListener('click', () => {
-    const required = ['budget', 'size', 'commute', 'priority', 'fuel'];
+    const required = ['buyer', 'budget', 'use', 'brand', 'power', 'market'];
     const missing = required.filter(k => !answers[k]);
     if (missing.length) {
       alert('Please answer all questions first.');
       return;
     }
-    const rec = recommend(answers);
-    const tierLabel = { low: 'Under $20k', mid: '$20–35k', high: '$35–55k', lux: '$55k+' }[rec.tier];
+    const recs = recommend(answers);
+    const tierLabel = { entry: '$500k–1M', apex: '$1M–3M', elite: '$3M+' }[answers.budget];
+    const useLabel = { track: 'track', canyon: 'canyon / weekend', gt: 'grand touring', garage: 'collector / store of value' }[answers.use];
+    const guidance = buyerGuidance(answers);
+
     const html = `
-      <h3>Recommended: ${rec.style}</h3>
-      <p>Based on your answers, here are three models to research in your <b>${tierLabel}</b> range:</p>
-      ${rec.list.map((m, i) => `
-        <div class="pick">
-          <div class="pick-name">${i + 1}. ${m}</div>
-          <div class="pick-meta">Look up reliability scores on Consumer Reports and TCO on Edmunds.</div>
-        </div>
-      `).join('')}
-      ${rec.adjustNote ? `<div class="tip">${rec.adjustNote}</div>` : ''}
-      <p style="margin-top:14px;color:var(--muted);font-size:0.88rem;">Next: head to the <b>Cost Calculator</b> tab to see what these would really cost per month.</p>
+      <h3>Your Shortlist · ${tierLabel} · ${useLabel}</h3>
+      ${recs.length === 0 ? '<p>No exact match — try widening brand or powertrain.</p>' :
+        recs.map((m, i) => `
+          <div class="pick">
+            <div class="pick-name">${i + 1}. ${m.name}</div>
+            <div class="pick-meta">${m.notes}</div>
+            <div class="pick-tags">
+              ${m.use.map(u => `<span class="tag">${u}</span>`).join('')}
+              <span class="tag">${m.power}</span>
+              <span class="tag">${m.brand}</span>
+            </div>
+          </div>
+        `).join('')}
+      ${guidance.length ? `<div class="meta-card">${guidance.join('<br><br>')}</div>` : ''}
+      <p style="margin-top:14px;color:var(--muted);font-size:0.88rem;">Next: <b>Ownership Cost</b> tab to model the real total over your holding period.</p>
     `;
     const el = document.getElementById('quizResult');
     el.innerHTML = html;
@@ -569,51 +678,71 @@
     el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   });
 
-  // ---------- TCO Calculator ----------
+  // ---------- TCO Calculator (depreciation-driven) ----------
   function calculateTCO() {
     const price = +document.getElementById('price').value || 0;
-    const down = +document.getElementById('down').value || 0;
-    const term = +document.getElementById('term').value || 60;
-    const apr = (+document.getElementById('apr').value || 0) / 100;
-    const miles = +document.getElementById('miles').value || 0;
-    const mpg = +document.getElementById('mpg').value || 30;
-    const gas = +document.getElementById('gas').value || 0;
+    const adm = +document.getElementById('adm').value || 0;
+    const years = +document.getElementById('years').value || 1;
+    const deprPct = (+document.getElementById('depr').value || 0) / 100;
+    const service = +document.getElementById('service').value || 0;
     const insurance = +document.getElementById('insurance').value || 0;
-    const maint = +document.getElementById('maint').value || 0;
+    const storage = +document.getElementById('storage').value || 0;
+    const miles = +document.getElementById('miles').value || 0;
+    const mpg = +document.getElementById('mpg').value || 14;
+    const gas = +document.getElementById('gas').value || 0;
+    const tireCost = +document.getElementById('tirecost').value || 0;
+    const tireLife = +document.getElementById('tirelife').value || 1;
 
-    const loanAmount = Math.max(0, price - down);
-    const monthlyRate = apr / 12;
-    let loanPayment = 0;
-    if (loanAmount > 0 && term > 0) {
-      if (monthlyRate === 0) loanPayment = loanAmount / term;
-      else loanPayment = loanAmount * monthlyRate / (1 - Math.pow(1 + monthlyRate, -term));
-    }
+    const allIn = price + adm;
+    const endValue = allIn * Math.pow(1 + deprPct, years);
+    const depreciation = allIn - endValue;   // negative = appreciation
 
     const annualFuel = (miles / Math.max(1, mpg)) * gas;
-    const monthlyFuel = annualFuel / 12;
-    const totalMonthly = loanPayment + monthlyFuel + insurance + maint;
-    const totalInterest = (loanPayment * term) - loanAmount;
-    const fiveYearCost = (totalMonthly * 60) + down;
+    const annualTires = (miles / Math.max(1, tireLife)) * tireCost;
+    const annualRunning = service + insurance + storage + annualFuel + annualTires;
+    const totalRunning = annualRunning * years;
+    const totalCost = depreciation + totalRunning;
+    const annualCost = totalCost / years;
+    const costPerMile = miles > 0 ? annualCost / miles : 0;
 
-    const money = n => '$' + n.toLocaleString('en-US', { maximumFractionDigits: 0 });
+    const money = n => (n < 0 ? '-' : '') + '$' + Math.abs(n).toLocaleString('en-US', { maximumFractionDigits: 0 });
+    const deprLabel = depreciation >= 0 ? 'Depreciation' : 'Appreciation';
 
     const html = `
-      <h3>Your real monthly cost: ${money(totalMonthly)}</h3>
+      <h3>${years}-year total cost: ${money(totalCost)}</h3>
       <div class="breakdown">
-        <div class="label">Loan payment</div><div class="val">${money(loanPayment)}/mo</div>
-        <div class="label">Fuel</div><div class="val">${money(monthlyFuel)}/mo</div>
-        <div class="label">Insurance</div><div class="val">${money(insurance)}/mo</div>
-        <div class="label">Maintenance</div><div class="val">${money(maint)}/mo</div>
-        <div class="label total-row">Total monthly</div><div class="val total-row">${money(totalMonthly)}/mo</div>
+        <div class="label">Purchase (price + ADM)</div><div class="val">${money(allIn)}</div>
+        <div class="label">Expected end value</div><div class="val">${money(endValue)}</div>
+        <div class="label">${deprLabel} over ${years} yrs</div><div class="val">${money(depreciation)}</div>
       </div>
-      <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--border);">
+
+      <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--border-strong);">
+        <div style="color:var(--muted);font-size:0.85rem;margin-bottom:8px;">Annual running costs</div>
         <div class="breakdown">
-          <div class="label">Total interest paid</div><div class="val">${money(totalInterest)}</div>
-          <div class="label">5-year total cost</div><div class="val">${money(fiveYearCost)}</div>
+          <div class="label">Service</div><div class="val">${money(service)}/yr</div>
+          <div class="label">Insurance</div><div class="val">${money(insurance)}/yr</div>
+          <div class="label">Storage</div><div class="val">${money(storage)}/yr</div>
+          <div class="label">Fuel</div><div class="val">${money(annualFuel)}/yr</div>
+          <div class="label">Tires</div><div class="val">${money(annualTires)}/yr</div>
+          <div class="label total-row">Annual running total</div><div class="val total-row">${money(annualRunning)}/yr</div>
         </div>
       </div>
+
+      <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--border-strong);">
+        <div class="breakdown">
+          <div class="label">${deprLabel}</div><div class="val">${money(depreciation)}</div>
+          <div class="label">Total running (${years} yrs)</div><div class="val">${money(totalRunning)}</div>
+          <div class="label total-row">Total cost of ownership</div><div class="val total-row">${money(totalCost)}</div>
+          <div class="label">Average annual cost</div><div class="val">${money(annualCost)}/yr</div>
+          ${miles > 0 ? `<div class="label">Cost per mile driven</div><div class="val">${money(costPerMile)}/mi</div>` : ''}
+        </div>
+      </div>
+
       <div class="tip" style="margin-top:14px;">
-        <b>Rule of thumb:</b> Total monthly car cost (including fuel + insurance) should ideally be under 15% of your take-home pay. Lenders will approve more — that doesn't mean it's a good idea.
+        <b>Reality check:</b> ${depreciation >= 0
+          ? `You'll lose <b>${money(depreciation)}</b> in value over ${years} years. To break even, you'd need annual appreciation of <b>${((Math.pow(1/(1-depreciation/allIn), 1/years) - 1) * 100).toFixed(1)}%</b>.`
+          : `This pick is appreciating — congrats. Just watch for over-restoration or excessive miles eroding the gain.`}
+        At this level, total cost is dominated by value change, not running costs.
       </div>
     `;
     const el = document.getElementById('tcoResult');
@@ -624,8 +753,7 @@
 
   document.getElementById('calcBtn').addEventListener('click', calculateTCO);
 
-  // Auto-recalc when any input changes after first calculation
-  ['price','down','term','apr','miles','mpg','gas','insurance','maint'].forEach(id => {
+  ['price','adm','years','depr','service','insurance','storage','miles','mpg','gas','tirecost','tirelife'].forEach(id => {
     document.getElementById(id).addEventListener('input', () => {
       if (document.getElementById('tcoResult').style.display === 'block') calculateTCO();
     });
