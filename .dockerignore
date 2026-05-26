@@ -1,0 +1,11 @@
+# Don't ship git history, k8s manifests, README, or local junk into the image
+.git
+.gitignore
+.github
+.vscode
+.idea
+README.md
+k8s/
+*.md
+.DS_Store
+node_modules

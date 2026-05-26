@@ -1,65 +1,119 @@
-# Smart Car Buying Helper
+# Supercar Buying Helper
 
-A single-page web app that helps people figure out what car to buy, what it'll really cost, and how to negotiate.
+A single-page web app for top-tier supercar and hypercar buyers — picker quiz, ownership-cost model (depreciation-driven), buying strategy (allocations, ADM, classics), and marque-specific PPI checklist.
 
-Built as a pure static site — no backend, no API keys, no build step. Just open `index.html` in a browser.
+Built as a pure static site — no backend, no API keys, no build step.
+
+Live at: https://moemirza14.github.io/car-buying-helper/
+
+---
 
 ## What's in it
 
-- **Lifestyle Quiz** — answer 5 questions, get a body-style recommendation with example models in your budget range
-- **Total Cost of Ownership Calculator** — loan payment + fuel + insurance + maintenance with live recalculation
-- **Negotiation Prep Checklist** — research steps and dealer tactics to watch for
-- **Used Car Inspection Guide** — documents, walkaround, under-the-hood, and test drive red flags
+- **Picker Quiz** — 6 questions across buyer type, budget tier, use, brand, powertrain, and market (new/used/classic). Scores against a 28-car catalog from $500k Porsches through Bugatti Tourbillon.
+- **Ownership Cost** — depreciation-driven TCO since value change dwarfs everything else at this tier. Supports appreciation for classics.
+- **Buying Strategy** — playbooks for chasing an allocation, buying used, and acquiring classics. Includes contract-stage anti-fraud tips.
+- **PPI Checklist** — marque-specific failure modes (Ferrari V8 manifolds, V12 clutch wear, Lambo carbon ceramics, McLaren coolant, Porsche 918 HV battery, universal paint/OBD checks).
 
-## Run it locally
+---
 
-Just double-click `index.html`. That's it.
+## Run it locally — 3 ways
 
-For a slightly nicer local preview with a real server:
+### 1. Just open the file (zero setup)
+
+Double-click `index.html`. Done.
+
+### 2. With a simple local server
 
 ```bash
-cd car-buying-helper
 python3 -m http.server 8000
-# then open http://localhost:8000
+# open http://localhost:8000
 ```
 
-## Deploy to GitHub Pages
-
-GitHub Pages serves static sites for free at `https://<your-username>.github.io/<repo-name>/`.
-
-### One-time setup
-
-1. **Create a GitHub account** if you don't have one: https://github.com/signup
-2. **Install Git** if it isn't already: https://git-scm.com/downloads
-
-### Push the project
-
-From inside the `car-buying-helper` folder, run:
+### 3. With Docker (production-equivalent)
 
 ```bash
-git init
-git add .
-git commit -m "Initial commit"
+docker build -t supercar-helper:dev .
+docker run --rm -p 8080:8080 supercar-helper:dev
+# open http://localhost:8080
 ```
 
-Then create a new repository on GitHub (call it something like `car-buying-helper`). After GitHub gives you the repo URL, run:
+That third option runs the *exact* image you'd ship to Kubernetes, locally. Identical behavior.
+
+---
+
+## Deploy options
+
+### Option A — GitHub Pages (what's currently in use)
+
+Already configured. Any `git push` to `main` auto-deploys to https://moemirza14.github.io/car-buying-helper/ in about a minute.
+
+### Option B — Container registry + Kubernetes
+
+For when you want full control over hosting, want to compose with other services, or are practicing real-world deployment workflows.
+
+**Build and push the image:**
 
 ```bash
-git branch -M main
-git remote add origin https://github.com/<your-username>/car-buying-helper.git
-git push -u origin main
+# Build
+docker build -t ghcr.io/moemirza14/supercar-helper:v1 .
+
+# Log in (GitHub Container Registry uses your gh token)
+echo $GH_TOKEN | docker login ghcr.io -u moemirza14 --password-stdin
+# Or for Docker Hub: docker login
+
+# Push
+docker push ghcr.io/moemirza14/supercar-helper:v1
 ```
 
-### Enable Pages
+**Apply the Kubernetes manifest:**
 
-1. Go to your repo on GitHub
-2. Click **Settings** (top right of the repo)
-3. In the left sidebar, click **Pages**
-4. Under **Source**, choose **Deploy from a branch**
-5. Pick the **main** branch and the **/ (root)** folder
-6. Click **Save**
+```bash
+# Point kubectl at your cluster first (kind, minikube, EKS, GKE, etc)
+kubectl apply -f k8s/manifest.yaml
 
-Wait 1–2 minutes, then visit `https://<your-username>.github.io/car-buying-helper/`. Your app is live.
+# Watch it come up
+kubectl -n supercar-helper get pods -w
+
+# Port-forward to test without an Ingress
+kubectl -n supercar-helper port-forward svc/supercar-helper 8080:80
+# open http://localhost:8080
+```
+
+The manifest declares: a Namespace, a Deployment (2 replicas, health-probed, resource-limited, hardened), a ClusterIP Service, and an optional Ingress. Read `k8s/manifest.yaml` — it's commented top to bottom.
+
+---
+
+## File layout
+
+```
+car-buying-helper/
+├── index.html         The entire app (HTML + CSS + JS in one file)
+├── Dockerfile         Builds an nginx-based image serving the site
+├── nginx.conf         nginx config with /healthz endpoint + security headers
+├── .dockerignore      Excludes git, k8s, README from the image
+├── k8s/
+│   └── manifest.yaml  Namespace + Deployment + Service + Ingress
+└── README.md          This file
+```
+
+---
+
+## Why a Dockerfile and Kubernetes manifest for a static site?
+
+**You don't strictly need them.** GitHub Pages already serves this site for free with a CDN and TLS.
+
+The reasons to learn this anyway:
+
+1. **Portability.** A container runs identically on your laptop, in CI, on any cloud. No "works on my machine."
+2. **Composability.** When you eventually add a backend, a database, or auth, you'll already have the deployment substrate in place.
+3. **Industry standard.** Every meaningful deployment workflow assumes containers. Learning to wrap even a static app teaches the pattern.
+4. **Kubernetes specifically gives you:** self-healing, rolling updates, horizontal scaling, declarative state, and the same YAML works on any cluster.
+
+If your goal is just "host this site for free and forever" → stick with GitHub Pages.
+If your goal is "learn how production deployments actually work" → use the Docker + K8s path.
+
+---
 
 ## Making changes
 
@@ -67,27 +121,18 @@ Edit `index.html`, then:
 
 ```bash
 git add .
-git commit -m "Describe your change"
+git commit -m "describe your change"
 git push
 ```
 
-GitHub Pages will pick up the change automatically within a minute.
+GitHub Pages re-deploys in about a minute. If you're also publishing a Docker image, bump the tag (`v1` → `v2`), rebuild, push, and update the manifest.
 
-## How it works
-
-Everything lives in one file:
-- The HTML structure has four `<section class="panel">` blocks for the four features
-- The CSS is in a `<style>` tag at the top
-- The JavaScript is in a `<script>` tag at the bottom
-- The quiz uses a simple rule-based scoring system to pick a body style, then maps that style + budget tier to a small list of example models
-- The TCO calculator uses the standard amortization formula for the loan portion
-
-No frameworks, no libraries, no dependencies. Easy to read and modify.
+---
 
 ## Ideas to extend
 
-- Add more quiz questions (towing needs, garage size, climate)
-- Expand the model database (currently has ~24 body-style/budget combos)
-- Add a "compare two cars side by side" mode
-- Save results to `localStorage` so they persist between visits
-- Add charts to the cost calculator using a CDN like Chart.js
+- Add charts to the cost calculator (Chart.js from CDN)
+- Side-by-side comparison of two cars across the same TCO inputs
+- Persist quiz answers to `localStorage`
+- More marques in the PPI checklist (Bentley, Rolls, Aston Martin, Pagani)
+- A backend API to track market prices over time (now you actually *would* need the container)

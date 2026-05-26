@@ -1,0 +1,156 @@
+# ============================================================
+#  Supercar Buying Helper — Kubernetes manifest
+# ------------------------------------------------------------
+#  This file contains 4 resources separated by `---`:
+#    1. Namespace      — logical grouping for everything below
+#    2. Deployment     — declares "I want N copies of this image"
+#    3. Service        — stable internal DNS + load balancing
+#    4. Ingress        — optional: exposes the Service to the
+#                        internet via an Ingress controller
+# ============================================================
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: supercar-helper
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: supercar-helper
+  namespace: supercar-helper
+  labels:
+    app: supercar-helper
+spec:
+  # Run 2 copies for redundancy. If one pod dies, traffic continues.
+  replicas: 2
+
+  # Tells the Deployment which pods belong to it
+  selector:
+    matchLabels:
+      app: supercar-helper
+
+  # Rolling update: replace pods one at a time, never with zero available
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+
+  template:
+    metadata:
+      labels:
+        app: supercar-helper
+    spec:
+      containers:
+        - name: web
+          # Replace with your registry path after pushing the image.
+          # Examples:
+          #   ghcr.io/moemirza14/supercar-helper:v1
+          #   docker.io/moemirza14/supercar-helper:v1
+          image: ghcr.io/moemirza14/supercar-helper:latest
+
+          # Pull "Always" while iterating; switch to "IfNotPresent" for pinned tags
+          imagePullPolicy: Always
+
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+
+          # Liveness: "is the process alive?" — restart if this fails
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+
+          # Readiness: "is it ready to serve traffic?" — pull from LB if false
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 2
+            periodSeconds: 5
+
+          # Resource budget. Requests = guaranteed; limits = ceiling.
+          # A static-site nginx is tiny; these are conservative.
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+            limits:
+              cpu: 100m
+              memory: 64Mi
+
+          # Hardening: read-only root FS + drop all Linux capabilities
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            capabilities:
+              drop: ["ALL"]
+
+          # nginx needs a few writable dirs even when running as non-root
+          volumeMounts:
+            - name: nginx-cache
+              mountPath: /var/cache/nginx
+            - name: nginx-run
+              mountPath: /var/run
+
+      volumes:
+        - name: nginx-cache
+          emptyDir: {}
+        - name: nginx-run
+          emptyDir: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: supercar-helper
+  namespace: supercar-helper
+  labels:
+    app: supercar-helper
+spec:
+  # ClusterIP = internal only. Switch to LoadBalancer on cloud providers
+  # (EKS/GKE/AKS) to get a public IP without an Ingress.
+  type: ClusterIP
+  selector:
+    app: supercar-helper
+  ports:
+    - name: http
+      port: 80          # the port other services use
+      targetPort: http  # forwarded to containerPort 8080
+
+---
+# OPTIONAL: only applies if you have an Ingress controller installed
+# (nginx-ingress, traefik, AWS ALB, etc). Delete this block if you don't.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: supercar-helper
+  namespace: supercar-helper
+  annotations:
+    # Use cert-manager if you want auto-TLS; otherwise remove this line.
+    # cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  ingressClassName: nginx
+  # tls:
+  #   - hosts:
+  #       - supercar.example.com
+  #     secretName: supercar-tls
+  rules:
+    - host: supercar.example.com   # change to your real domain
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: supercar-helper
+                port:
+                  number: 80
