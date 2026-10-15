@@ -1,0 +1,52 @@
+pipeline:
+  id: pipeline_moemirza14_car_buying_helper_build_6ad4
+  name: pipeline_moemirza14_car_buying_helper_build_6ad4
+  stages:
+    - id: validate
+      name: Validate
+      runtime: cloud
+      clone:
+        enabled: true
+      cache:
+        enabled: true
+      steps:
+        - id: validate_html
+          name: Validate HTML
+          run:
+            shell: bash
+            script: |-
+              echo "Validating static HTML site..."
+
+              # Verify index.html exists and has content
+              if [ ! -f "index.html" ]; then
+                echo "ERROR: index.html not found"
+                exit 1
+              fi
+
+              if [ ! -s "index.html" ]; then
+                echo "ERROR: index.html is empty"
+                exit 1
+              fi
+
+              # Basic HTML structure validation
+              if ! grep -q "<!DOCTYPE html>" index.html; then
+                echo "WARNING: Missing DOCTYPE declaration"
+              fi
+
+              if ! grep -q "<html" index.html; then
+                echo "ERROR: Missing <html> tag"
+                exit 1
+              fi
+
+              if ! grep -q "</html>" index.html; then
+                echo "ERROR: Missing closing </html> tag"
+                exit 1
+              fi
+
+              echo "HTML file size: $(wc -c < index.html) bytes"
+              echo "HTML line count: $(wc -l < index.html) lines"
+              echo ""
+              echo "Static HTML validation passed!"
+          timeout: 5m
+  tags:
+    onboarding: "true"
