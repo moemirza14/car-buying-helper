@@ -10,6 +10,10 @@ pipeline:
       cache:
         enabled: true
       steps:
+        - id: gitleaks_scan
+          name: Gitleaks Secret Scan
+          template:
+            uses: gitleaksStep
         - id: validate_html
           name: Validate HTML
           run:
