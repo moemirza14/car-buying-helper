@@ -1,0 +1,15 @@
+{
+  "name": "car-buying-helper-demo-vulnerable",
+  "version": "0.0.1",
+  "private": true,
+  "description": "DEMO ONLY: old dependency versions with known CVEs for SCA scanner demos",
+  "dependencies": {
+    "axios": "0.18.0",
+    "express": "4.16.0",
+    "handlebars": "4.0.11",
+    "jsonwebtoken": "8.5.0",
+    "lodash": "4.17.15",
+    "minimist": "1.2.0",
+    "node-fetch": "2.6.0"
+  }
+}

@@ -1,0 +1,40 @@
+# DEMO ONLY: intentionally misconfigured for IaC scanner demos. Not applied by deploy steps.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: car-buying-helper-insecure-demo
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: car-buying-helper-insecure-demo
+  template:
+    metadata:
+      labels:
+        app: car-buying-helper-insecure-demo
+    spec:
+      hostNetwork: true
+      hostPID: true
+      containers:
+        - name: web
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+          securityContext:
+            privileged: true
+            runAsUser: 0
+            allowPrivilegeEscalation: true
+            readOnlyRootFilesystem: false
+            capabilities:
+              add: ["SYS_ADMIN", "NET_ADMIN"]
+          env:
+            - name: DB_PASSWORD
+              value: "Sup3rS3cret!Passw0rd"
+          volumeMounts:
+            - name: host-root
+              mountPath: /host
+      volumes:
+        - name: host-root
+          hostPath:
+            path: /
