@@ -14,6 +14,10 @@ pipeline:
           name: Gitleaks Secret Scan
           template:
             uses: gitleaksStep
+        - id: semgrep_scan
+          name: Semgrep Scan
+          template:
+            uses: semgrepStep
         - id: validate_html
           name: Validate HTML
           run:
